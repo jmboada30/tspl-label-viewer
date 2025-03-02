@@ -1,6 +1,10 @@
 let SCALE = 0.5; // Reducir tamaño para previsualización
 const UNIT = "px";
 let currentLabelWidth = 400; // se actualizará con SIZE
+let loadedDesignIndex = null; // Índice del diseño cargado
+
+document.getElementById("saveDesignBtn").addEventListener("click", saveDesign);
+document.getElementById("loadDesignsLink").addEventListener("click", loadDesigns);
 
 document.getElementById("previewBtn").addEventListener("click", updatePreview);
 document.getElementById("scaleSelect").addEventListener("change", (event) => {
@@ -217,4 +221,53 @@ function handleBarcodeCommand(line, previewDiv) {
 
     previewDiv.appendChild(barcodeContainer);
   }
+}
+
+function saveDesign() {
+  const tsplText = document.getElementById("tsplInput").value;
+  let designName;
+
+  if (loadedDesignIndex !== null) {
+    const designs = JSON.parse(localStorage.getItem("designs")) || [];
+    designName = designs[loadedDesignIndex].name;
+    designs[loadedDesignIndex] = {
+      name: designName,
+      date: new Date().toLocaleString(),
+      content: tsplText
+    };
+    localStorage.setItem("designs", JSON.stringify(designs));
+    alert(`Diseño "${designName}" actualizado exitosamente.`);
+  } else {
+    designName = prompt("Ingrese el nombre del diseño:");
+    if (!designName) return;
+
+    const designs = JSON.parse(localStorage.getItem("designs")) || [];
+    const newDesign = {
+      name: designName,
+      date: new Date().toLocaleString(),
+      content: tsplText
+    };
+
+    designs.push(newDesign);
+    localStorage.setItem("designs", JSON.stringify(designs));
+    alert("Diseño guardado exitosamente.");
+  }
+}
+
+function loadDesigns() {
+  const designs = JSON.parse(localStorage.getItem("designs")) || [];
+  if (designs.length === 0) {
+    alert("No hay diseños guardados.");
+    return;
+  }
+
+  const designList = designs.map((design, index) => `${index + 1}. ${design.name} (Última modificación: ${design.date})`).join("\n");
+  const selectedDesignIndex = prompt(`Seleccione un diseño para cargar:\n${designList}`);
+  const selectedDesign = designs[selectedDesignIndex - 1];
+
+  if (selectedDesign) {
+    document.getElementById("tsplInput").value = selectedDesign.content;
+    loadedDesignIndex = selectedDesignIndex - 1;
+    updatePreview()
+  } 
 }

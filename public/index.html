@@ -7,9 +7,16 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+ 
   <div class="main">
     <h1 class="title">Previsualizar TSPL</h1>
+    
     <p class="description">Simulación de etiqueta con elementos SIZE, CLS, TEXT, BAR y BARCODE</p>
+
+    <nav>
+      <a href="#" id="loadDesignsLink">Cargar Diseños Guardados</a>
+    </nav>
+
     <div class="container">
       <div class="input-container">
         <textarea
@@ -26,7 +33,10 @@
             <option value="1.5">150%</option>
           </select>
         </div>
-        <button class="preview-btn" id="previewBtn">Previsualizar</button>
+        <div class="">
+          <button id="saveDesignBtn" class="secondary-button">Guardar Diseño</button>
+          <button class="preview-btn" id="previewBtn">Previsualizar</button>
+        </div>
       </div>
       <div class="preview-container">
         <div id="labelPreview" class="label-preview">
