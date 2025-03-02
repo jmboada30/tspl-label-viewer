@@ -2,16 +2,27 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Previsualizador TSPL</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Previsualizador TSPL</h1>
-  <div class="container">
-    <textarea id="tsplInput" placeholder="Escribe tus comandos TSPL aquí..."></textarea>
-    <button id="previewBtn">Previsualizar</button>
-    <div id="labelPreview" class="label-preview">
-      <!-- Aquí se mostrará la etiqueta -->
+  <div class="main">
+    <h1 class="title">Previsualiza etiquetas TSPL</h1>
+    <p class="description">Simula elementos SIZE, CLS, TEXT, BAR y BARCODE</p>
+    <div class="container">
+      <div class="input-container">
+        <textarea
+          id="tsplInput"
+          placeholder="Escribe tus comandos TSPL aquí..."
+        ></textarea>
+        <button class="preview-btn" id="previewBtn">Previsualizar</button>
+      </div>
+      <div class="preview-container">
+        <div id="labelPreview" class="label-preview">
+          <!-- Aquí se mostrará la etiqueta -->
+        </div>
+      </div>
     </div>
   </div>
   <script src="script.js"></script>
