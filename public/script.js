@@ -1,8 +1,11 @@
-const SCALE = 1 / 3.4; // Reducir tamaño a un tercio
+let SCALE = 0.5; // Reducir tamaño para previsualización
 const UNIT = "px";
 let currentLabelWidth = 400; // se actualizará con SIZE
 
 document.getElementById("previewBtn").addEventListener("click", updatePreview);
+document.getElementById("scaleSelect").addEventListener("change", (event) => {
+  SCALE = parseFloat(event.target.value);
+});
 
 function updatePreview() {
   const tsplText = document.getElementById("tsplInput").value;
