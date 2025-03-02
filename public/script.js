@@ -1,12 +1,17 @@
-document.getElementById("previewBtn").addEventListener("click", updatePreview);
+const SCALE = 1 / 3.4; // Reducir tamaño a un tercio
 const UNIT = "px";
+let currentLabelWidth = 400; // se actualizará con SIZE
+
+document.getElementById("previewBtn").addEventListener("click", updatePreview);
 
 function updatePreview() {
   const tsplText = document.getElementById("tsplInput").value;
   const lines = tsplText.split("\n");
 
+  // Valores por defecto (en dots, sin escalar)
   let labelWidth = 400;
-
+  let labelHeight = 300;
+  
   const previewDiv = document.getElementById("labelPreview");
   previewDiv.innerHTML = "";
   previewDiv.style.position = "relative";
@@ -18,38 +23,35 @@ function updatePreview() {
     const upperLine = line.toUpperCase();
 
     if (upperLine.startsWith("SIZE")) {
-      handleSizeCommand(line, previewDiv);
+      // Ejemplo: SIZE 4,1 o SIZE 50 mm,25 mm
+      const params = line.substring(4).trim().split(",");
+      if (params.length >= 2) {
+        let w = params[0].trim();
+        let h = params[1].trim();
+        if (w.toLowerCase().includes("mm")) {
+          labelWidth = parseFloat(w) * 8;
+        } else {
+          labelWidth = parseFloat(w) * 203;
+        }
+        if (h.toLowerCase().includes("mm")) {
+          labelHeight = parseFloat(h) * 8;
+        } else {
+          labelHeight = parseFloat(h) * 203;
+        }
+        currentLabelWidth = labelWidth; // Guardamos el ancho original para cálculos de alineación
+        previewDiv.style.width = (labelWidth * SCALE) + UNIT;
+        previewDiv.style.height = (labelHeight * SCALE) + UNIT;
+      }
     } else if (upperLine.startsWith("CLS")) {
       previewDiv.innerHTML = "";
     } else if (upperLine.startsWith("TEXT")) {
-      handleTextCommand(line, previewDiv, labelWidth);
+      handleTextCommand(line, previewDiv, currentLabelWidth);
     } else if (upperLine.startsWith("BARCODE")) {
       handleBarcodeCommand(line, previewDiv);
     } else if (upperLine.startsWith("BAR")) {
       handleBarCommand(line, previewDiv);
     }
   });
-}
-
-function handleSizeCommand(line, previewDiv) {
-  const params = line.substring(4).trim().split(",");
-  if (params.length >= 2) {
-    let w = params[0].trim();
-    let h = params[1].trim();
-    let labelWidth, labelHeight;
-    if (w.toLowerCase().includes("mm")) {
-      labelWidth = parseFloat(w) * 8;
-    } else {
-      labelWidth = parseFloat(w) * 203;
-    }
-    if (h.toLowerCase().includes("mm")) {
-      labelHeight = parseFloat(h) * 8;
-    } else {
-      labelHeight = parseFloat(h) * 203;
-    }
-    previewDiv.style.width = labelWidth + UNIT;
-    previewDiv.style.height = labelHeight + UNIT;
-  }
 }
 
 function handleTextCommand(line, previewDiv, labelWidth) {
@@ -67,15 +69,16 @@ function handleTextCommand(line, previewDiv, labelWidth) {
     const content = match[8];
 
     const textDiv = document.createElement("div");
+    // Escalar coordenadas
     textDiv.style.position = "absolute";
-    textDiv.style.left = x + UNIT;
-    textDiv.style.top = y + UNIT;
+    textDiv.style.left = (x * SCALE) + UNIT;
+    textDiv.style.top = (y * SCALE) + UNIT;
     textDiv.style.whiteSpace = "nowrap";
     textDiv.textContent = content;
 
     const { baseFontSize, fontFamily } = getFontProperties(font);
     const finalFontSize = baseFontSize * ymult;
-    textDiv.style.fontSize = finalFontSize + UNIT;
+    textDiv.style.fontSize = (finalFontSize * SCALE) + UNIT;
     textDiv.style.fontFamily = fontFamily;
 
     setAlignment(textDiv, alignment, labelWidth, x);
@@ -102,12 +105,14 @@ function getFontProperties(font) {
 }
 
 function setAlignment(textDiv, alignment, labelWidth, x) {
+  // Calcular el ancho disponible (en dots) y luego aplicar escala
+  const availableWidth = (labelWidth - x) * SCALE;
   if (alignment === 2) {
     textDiv.style.textAlign = "center";
-    textDiv.style.width = labelWidth - x + UNIT;
+    textDiv.style.width = availableWidth + UNIT;
   } else if (alignment === 3) {
     textDiv.style.textAlign = "right";
-    textDiv.style.width = labelWidth - x + UNIT;
+    textDiv.style.width = availableWidth + UNIT;
   } else {
     textDiv.style.textAlign = "left";
   }
@@ -136,10 +141,10 @@ function handleBarCommand(line, previewDiv) {
 
     const barDiv = document.createElement("div");
     barDiv.style.position = "absolute";
-    barDiv.style.left = x + UNIT;
-    barDiv.style.top = y + UNIT;
-    barDiv.style.width = widthBar + UNIT;
-    barDiv.style.height = heightBar + UNIT;
+    barDiv.style.left = (x * SCALE) + UNIT;
+    barDiv.style.top = (y * SCALE) + UNIT;
+    barDiv.style.width = (widthBar * SCALE) + UNIT;
+    barDiv.style.height = (heightBar * SCALE) + UNIT;
     barDiv.style.backgroundColor = "black";
 
     previewDiv.appendChild(barDiv);
@@ -171,14 +176,17 @@ function handleBarcodeCommand(line, previewDiv) {
 
     const barcodeContainer = document.createElement("div");
     barcodeContainer.style.position = "absolute";
-    barcodeContainer.style.left = x + UNIT;
-    barcodeContainer.style.top = y + UNIT;
+    barcodeContainer.style.left = (x * SCALE) + UNIT;
+    barcodeContainer.style.top = (y * SCALE) + UNIT;
 
-    const barcodeWidth = (narrow + wide) * content.length * 8;
+    // Se utiliza una fórmula simple: (narrow+wide)* (longitud del contenido)* factor base (8 dots)
+    let barcodeWidth = (narrow + wide) * content.length * 8;
+    // Aplicamos la escala
+    barcodeWidth = barcodeWidth * SCALE;
 
     const barcodeBar = document.createElement("div");
     barcodeBar.style.width = barcodeWidth + UNIT;
-    barcodeBar.style.height = heightBarcode + UNIT;
+    barcodeBar.style.height = (heightBarcode * SCALE) + UNIT;
     barcodeBar.style.backgroundColor = "black";
     barcodeContainer.appendChild(barcodeBar);
 
@@ -186,7 +194,7 @@ function handleBarcodeCommand(line, previewDiv) {
       const textDiv = document.createElement("div");
       textDiv.textContent = content;
       textDiv.style.width = barcodeWidth + UNIT;
-      textDiv.style.fontSize = "24px";
+      textDiv.style.fontSize = (24 * SCALE) + UNIT; // tamaño fijo para previsualizar
       textDiv.style.fontFamily = "monospace";
       if (alignment === 2) {
         textDiv.style.textAlign = "center";
@@ -195,7 +203,7 @@ function handleBarcodeCommand(line, previewDiv) {
       } else {
         textDiv.style.textAlign = "left";
       }
-      textDiv.style.marginTop = "2" + UNIT;
+      textDiv.style.marginTop = 2 * SCALE + UNIT;
       barcodeContainer.appendChild(textDiv);
     }
 
