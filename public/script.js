@@ -4,7 +4,9 @@ let currentLabelWidth = 400; // se actualizará con SIZE
 let loadedDesignIndex = null; // Índice del diseño cargado
 
 document.getElementById("saveDesignBtn").addEventListener("click", saveDesign);
-document.getElementById("loadDesignsLink").addEventListener("click", loadDesigns);
+document
+  .getElementById("loadDesignsLink")
+  .addEventListener("click", loadDesigns);
 
 document.getElementById("previewBtn").addEventListener("click", updatePreview);
 document.getElementById("scaleSelect").addEventListener("change", (event) => {
@@ -18,7 +20,7 @@ function updatePreview() {
   // Valores por defecto (en dots, sin escalar)
   let labelWidth = 400;
   let labelHeight = 300;
-  
+
   const previewDiv = document.getElementById("labelPreview");
   previewDiv.innerHTML = "";
   previewDiv.style.position = "relative";
@@ -46,8 +48,8 @@ function updatePreview() {
           labelHeight = parseFloat(h) * 203;
         }
         currentLabelWidth = labelWidth; // Guardamos el ancho original para cálculos de alineación
-        previewDiv.style.width = (labelWidth * SCALE) + UNIT;
-        previewDiv.style.height = (labelHeight * SCALE) + UNIT;
+        previewDiv.style.width = labelWidth * SCALE + UNIT;
+        previewDiv.style.height = labelHeight * SCALE + UNIT;
       }
     } else if (upperLine.startsWith("CLS")) {
       previewDiv.innerHTML = "";
@@ -78,14 +80,14 @@ function handleTextCommand(line, previewDiv, labelWidth) {
     const textDiv = document.createElement("div");
     // Escalar coordenadas
     textDiv.style.position = "absolute";
-    textDiv.style.left = (x * SCALE) + UNIT;
-    textDiv.style.top = (y * SCALE) + UNIT;
+    textDiv.style.left = x * SCALE + UNIT;
+    textDiv.style.top = y * SCALE + UNIT;
     textDiv.style.whiteSpace = "nowrap";
     textDiv.textContent = content;
 
     const { baseFontSize, fontFamily } = getFontProperties(font);
     const finalFontSize = baseFontSize * ymult;
-    textDiv.style.fontSize = (finalFontSize * SCALE) + UNIT;
+    textDiv.style.fontSize = finalFontSize * SCALE + UNIT;
     textDiv.style.fontFamily = fontFamily;
 
     setAlignment(textDiv, alignment, labelWidth, x);
@@ -148,10 +150,10 @@ function handleBarCommand(line, previewDiv) {
 
     const barDiv = document.createElement("div");
     barDiv.style.position = "absolute";
-    barDiv.style.left = (x * SCALE) + UNIT;
-    barDiv.style.top = (y * SCALE) + UNIT;
-    barDiv.style.width = (widthBar * SCALE) + UNIT;
-    barDiv.style.height = (heightBar * SCALE) + UNIT;
+    barDiv.style.left = x * SCALE + UNIT;
+    barDiv.style.top = y * SCALE + UNIT;
+    barDiv.style.width = widthBar * SCALE + UNIT;
+    barDiv.style.height = heightBar * SCALE + UNIT;
     barDiv.style.backgroundColor = "black";
 
     previewDiv.appendChild(barDiv);
@@ -183,8 +185,8 @@ function handleBarcodeCommand(line, previewDiv) {
 
     const barcodeContainer = document.createElement("div");
     barcodeContainer.style.position = "absolute";
-    barcodeContainer.style.left = (x * SCALE) + UNIT;
-    barcodeContainer.style.top = (y * SCALE) + UNIT;
+    barcodeContainer.style.left = x * SCALE + UNIT;
+    barcodeContainer.style.top = y * SCALE + UNIT;
 
     // Se utiliza una fórmula simple: (narrow+wide)* (longitud del contenido)* factor base (8 dots)
     let barcodeWidth = (narrow + wide) * content.length * 8;
@@ -193,7 +195,7 @@ function handleBarcodeCommand(line, previewDiv) {
 
     const barcodeBar = document.createElement("div");
     barcodeBar.style.width = barcodeWidth + UNIT;
-    barcodeBar.style.height = (heightBarcode * SCALE) + UNIT;
+    barcodeBar.style.height = heightBarcode * SCALE + UNIT;
     barcodeBar.style.backgroundColor = "black";
     barcodeContainer.appendChild(barcodeBar);
 
@@ -201,7 +203,7 @@ function handleBarcodeCommand(line, previewDiv) {
       const textDiv = document.createElement("div");
       textDiv.textContent = content;
       textDiv.style.width = barcodeWidth + UNIT;
-      textDiv.style.fontSize = (24 * SCALE) + UNIT; // tamaño fijo para previsualizar
+      textDiv.style.fontSize = 24 * SCALE + UNIT; // tamaño fijo para previsualizar
       textDiv.style.fontFamily = "monospace";
       if (alignment === 2) {
         textDiv.style.textAlign = "center";
@@ -233,7 +235,7 @@ function saveDesign() {
     designs[loadedDesignIndex] = {
       name: designName,
       date: new Date().toLocaleString(),
-      content: tsplText
+      content: tsplText,
     };
     localStorage.setItem("designs", JSON.stringify(designs));
     alert(`Diseño "${designName}" actualizado exitosamente.`);
@@ -245,7 +247,7 @@ function saveDesign() {
     const newDesign = {
       name: designName,
       date: new Date().toLocaleString(),
-      content: tsplText
+      content: tsplText,
     };
 
     designs.push(newDesign);
@@ -261,13 +263,41 @@ function loadDesigns() {
     return;
   }
 
-  const designList = designs.map((design, index) => `${index + 1}. ${design.name} (Última modificación: ${design.date})`).join("\n");
-  const selectedDesignIndex = prompt(`Seleccione un diseño para cargar:\n${designList}`);
+  const designList = designs
+    .map(
+      (design, index) =>
+        `${index + 1}. ${design.name} (Última modificación: ${design.date})`
+    )
+    .join("\n");
+  const selectedDesignIndex = prompt(
+    `Seleccione un diseño para cargar:\n${designList}`
+  );
   const selectedDesign = designs[selectedDesignIndex - 1];
 
   if (selectedDesign) {
     document.getElementById("tsplInput").value = selectedDesign.content;
     loadedDesignIndex = selectedDesignIndex - 1;
-    updatePreview()
-  } 
+    updatePreview();
+  }
 }
+
+function loadInit() {
+  document.getElementById("tsplInput").value = `SIZE 100mm, 75mm
+
+TEXT 50,16,"3",0,1,1,"Empresa SSL"
+TEXT 620,16,"3",0,1,1,"01/03/2025"
+TEXT 50,40,"3",0,1,1,"Ciudad Pais"
+TEXT 50,64,"3",0,1,1,"paginaweb.com"
+BAR 50,96,700,3
+
+BARCODE 120,220,"128",120,2,0,4,2,"00001000004"
+
+BAR 50,450,700,3
+TEXT 50,490,"3",0,1,2,"Desc Corta"
+BAR 400,450,3,120
+TEXT 430,475,"3",0,1,3,"00001"`;
+
+  updatePreview();
+}
+
+loadInit();
