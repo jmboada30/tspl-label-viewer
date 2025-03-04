@@ -80,7 +80,7 @@ function handleTextCommand(line, previewDiv, labelWidth) {
     const textDiv = document.createElement("div");
     // Escalar coordenadas
     textDiv.style.position = "absolute";
-    textDiv.style.left = x * SCALE + UNIT;
+    textDiv.style.left = (x - 12) * SCALE + UNIT;
     textDiv.style.top = y * SCALE + UNIT;
     textDiv.style.whiteSpace = "nowrap";
     textDiv.textContent = content;
@@ -130,7 +130,7 @@ function setAlignment(textDiv, alignment, labelWidth, x) {
 function applyRotation(textDiv, rotation) {
   if (rotation !== 0) {
     textDiv.style.transform = `rotate(${rotation}deg)`;
-    textDiv.style.transformOrigin = "left top";
+    textDiv.style.transformOrigin = "left";
   }
 }
 
@@ -150,7 +150,7 @@ function handleBarCommand(line, previewDiv) {
 
     const barDiv = document.createElement("div");
     barDiv.style.position = "absolute";
-    barDiv.style.left = x * SCALE + UNIT;
+    barDiv.style.left = (x - 12) * SCALE + UNIT;
     barDiv.style.top = y * SCALE + UNIT;
     barDiv.style.width = widthBar * SCALE + UNIT;
     barDiv.style.height = heightBar * SCALE + UNIT;
@@ -189,7 +189,7 @@ function handleBarcodeCommand(line, previewDiv) {
     barcodeContainer.style.top = y * SCALE + UNIT;
 
     // Se utiliza una fórmula simple: (narrow+wide)* (longitud del contenido)* factor base (8 dots)
-    let barcodeWidth = (narrow + wide) * content.length * 8;
+    let barcodeWidth = (narrow + wide) * content.length * 6;
     // Aplicamos la escala
     barcodeWidth = barcodeWidth * SCALE;
 
@@ -203,7 +203,7 @@ function handleBarcodeCommand(line, previewDiv) {
       const textDiv = document.createElement("div");
       textDiv.textContent = content;
       textDiv.style.width = barcodeWidth + UNIT;
-      textDiv.style.fontSize = 24 * SCALE + UNIT; // tamaño fijo para previsualizar
+      textDiv.style.fontSize = 30 * SCALE + UNIT; // tamaño fijo para previsualizar
       textDiv.style.fontFamily = "monospace";
       if (alignment === 2) {
         textDiv.style.textAlign = "center";
@@ -218,7 +218,7 @@ function handleBarcodeCommand(line, previewDiv) {
 
     if (rotation !== 0) {
       barcodeContainer.style.transform = `rotate(${rotation}deg)`;
-      barcodeContainer.style.transformOrigin = "left top";
+      barcodeContainer.style.transformOrigin = "left";
     }
 
     previewDiv.appendChild(barcodeContainer);
