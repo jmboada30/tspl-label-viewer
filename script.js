@@ -80,7 +80,7 @@ function handleTextCommand(line, previewDiv, labelWidth) {
     const textDiv = document.createElement("div");
     // Escalar coordenadas
     textDiv.style.position = "absolute";
-    textDiv.style.left = (x - 12) * SCALE + UNIT;
+    textDiv.style.left = x * SCALE + UNIT;
     textDiv.style.top = y * SCALE + UNIT;
     textDiv.style.whiteSpace = "nowrap";
     textDiv.textContent = content;
@@ -131,12 +131,13 @@ function applyRotation(textDiv, rotation) {
   if (rotation !== 0) {
     textDiv.style.transform = `rotate(${rotation}deg)`;
     textDiv.style.transformOrigin = "left";
+    textDiv.style.left = textDiv.style.left.replace("px", "") - 10 + UNIT;
   }
 }
 
 function applyScaleX(textDiv, xmult) {
   if (xmult !== 1) {
-    textDiv.style.transform += ` scaleX(${xmult})`;
+    textDiv.style.transform += ` scaleX(${((xmult / 100) * 10) + 1})`;
   }
 }
 
@@ -150,7 +151,7 @@ function handleBarCommand(line, previewDiv) {
 
     const barDiv = document.createElement("div");
     barDiv.style.position = "absolute";
-    barDiv.style.left = (x - 12) * SCALE + UNIT;
+    barDiv.style.left = x * SCALE + UNIT;
     barDiv.style.top = y * SCALE + UNIT;
     barDiv.style.width = widthBar * SCALE + UNIT;
     barDiv.style.height = heightBar * SCALE + UNIT;
