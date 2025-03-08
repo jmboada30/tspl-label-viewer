@@ -4,6 +4,22 @@ import { setAlignment } from '../utils/alignmentUtils.js';
 import { applyRotation, applyScaleX } from '../utils/transformUtils.js';
 import { getFontProperties } from '../utils/fontUtils.js';
 
+/**
+ * Handles the TEXT command by parsing the input line and rendering the text on the previewDiv.
+ *
+ * @param {string} line - The input line containing the TEXT command.
+ * @param {HTMLElement} previewDiv - The div element where the text will be rendered.
+ * @param {number} labelWidth - The width of the label for alignment purposes.
+ *
+ * @param {number} x - The x-coordinate for the text position.
+ * @param {number} y - The y-coordinate for the text position.
+ * @param {string} font - The font type for the text.
+ * @param {number} rotation - The rotation angle for the text.
+ * @param {number} xmult - The horizontal scaling factor for the text.
+ * @param {number} ymult - The vertical scaling factor for the text.
+ * @param {number} [alignment=1] - The alignment of the text (optional, default is 1) (1 = left, 2 = center, 3 = right).
+ * @param {string} content - The actual text content to be displayed.
+ */
 export function handleTextCommand(line, previewDiv, labelWidth) {
   const SCALE = getScale();
   const UNIT = getUnit();

@@ -1,5 +1,19 @@
 import {getScale, getUnit} from '../store/state.js'
 
+/**
+ * Handles the bar command by creating a bar (div element) and appending it to the previewDiv.
+ *
+ * @param {string} line - The command line containing the parameters for the bar.
+ * @param {HTMLElement} previewDiv - The div element where the bar will be appended.
+ *
+ * The command line should have the following format:
+ * BAR x,y,width,height
+ * 
+ * @param {number} x - The x-coordinate for the bar's position.
+ * @param {number} y - The y-coordinate for the bar's position.
+ * @param {number} widthBar - The width of the bar.
+ * @param {number} heightBar - The height of the bar.
+ */
 export function handleBarCommand(line, previewDiv) {
   const SCALE = getScale();
   const UNIT = getUnit();

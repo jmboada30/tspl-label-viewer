@@ -4,6 +4,26 @@ import { setAlignment } from '../utils/alignmentUtils.js';
 import { applyRotation, applyScaleX } from '../utils/transformUtils.js';
 import { getFontProperties } from '../utils/fontUtils.js';
 
+/**
+ * Handles the BLOCK command by creating a block element and appending it to the preview area.
+ *
+ * @param {string} line - The command line containing the BLOCK command.
+ * @param {HTMLElement} previewDiv - The div element where the block will be appended.
+ * @param {number} labelWidth - The width of the label.
+ *
+ * @param {number} x - The x-coordinate of the block.
+ * @param {number} y - The y-coordinate of the block.
+ * @param {number} width - The width of the block.
+ * @param {number} height - The height of the block.
+ * @param {string} font - The font used in the block.
+ * @param {number} rotation - The rotation angle of the block.
+ * @param {number} xmult - The horizontal scaling factor.
+ * @param {number} ymult - The vertical scaling factor.
+ * @param {number} [space=0] - The space between characters.
+ * @param {number} [alignment=1] - The text alignment within the block.
+ * @param {number} [fit=0] - Whether the text should fit within the block.
+ * @param {string} content - The content of the block.
+ */
 export function handleBlockCommand(line, previewDiv, labelWidth) {
    const SCALE = getScale();
     const UNIT = getUnit();

@@ -1,5 +1,22 @@
 import {getScale, getUnit} from '../store/state.js';
 
+/**
+ * Handles the barcode command by parsing the input line and rendering a barcode preview.
+ *
+ * @param {string} line - The input line containing the barcode command.
+ * @param {HTMLElement} previewDiv - The div element where the barcode preview will be appended.
+ * 
+ * @param {number} x - The x-coordinate for the barcode position.
+ * @param {number} y - The y-coordinate for the barcode position.
+ * @param {string} codeType - The type of the barcode.
+ * @param {number} heightBarcode - The height of the barcode.
+ * @param {number} humanReadable - Indicates if the barcode should be human-readable.
+ * @param {number} rotation - The rotation angle of the barcode.
+ * @param {number} narrow - The narrow bar width of the barcode.
+ * @param {number} wide - The wide bar width of the barcode.
+ * @param {number} [alignment] - The alignment of the human-readable text (optional).
+ * @param {string} content - The content of the barcode.
+ */
 export function handleBarcodeCommand(line, previewDiv) {
   const SCALE = getScale();
   const UNIT = getUnit();  
