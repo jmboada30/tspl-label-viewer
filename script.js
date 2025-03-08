@@ -344,6 +344,8 @@ TEXT 50,40,"3",0,1,1,"Ciudad Pais"
 TEXT 50,64,"3",0,1,1,"paginaweb.com"
 BAR 50,96,700,3
 
+BLOCK 50,120,700,100,"3",0,1,1,0,2,1,"We stand behind our products with one of the most comprehensive support programs in the Auto-ID industry."
+
 BARCODE 120,220,"128",120,2,0,4,2,"00001000004"
 
 BAR 50,450,700,3
