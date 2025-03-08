@@ -75,4 +75,4 @@ export function handleBlockCommand(line, previewDiv, labelWidth) {
       // Agregar el bloque al área de previsualización
       previewDiv.appendChild(blockDiv);
     }
-  }
+}

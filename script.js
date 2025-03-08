@@ -1,7 +1,8 @@
 import { handleBarcodeCommand } from './commands/barCodeCommand.js';
 import { handleBarCommand } from './commands/barCommand.js';
 import { handleBlockCommand } from './commands/blockCommand.js';
-import { handleTextCommand } from './commands/textCommand.js';
+import { handleTextCommand } from './commands/textCommand.js'
+import { handleBoxCommand } from './commands/boxCommand.js';
 import { getScale, getUnit, setScale, getCurrentLabelWidth,  } from './store/state.js';
 import { loadDesigns, saveDesign } from './store/desing.js'
 
@@ -68,6 +69,8 @@ function updatePreview() {
       handleBarCommand(line, previewDiv);
     }else if (upperLine.startsWith("BLOCK")) {
       handleBlockCommand(line, previewDiv);
+    }else if (upperLine.startsWith("BOX")) {
+      handleBoxCommand(line, previewDiv);
     }
   });
 }
